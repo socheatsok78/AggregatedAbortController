@@ -1,0 +1,17 @@
+{
+  "name": "aggregated-abortcontroller",
+  "version": "1.0.0-rc.1",
+  "description": "A extendable `AbortController` with link aggregation with existing `AbortController` or `AbortSignal`.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
