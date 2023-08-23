@@ -43,19 +43,19 @@ The following methods are added as extras to the `AggregatedAbortController`:
 const aggregatedController = new AggregatedAbortController(signals: (AbortSignal | AbortController)[])
 ```
 
-### `AggregatedAbortController.attach`
+### `AggregatedAbortController.attach()`
 Attach a signal to this controller.
 ```ts
 aggregatedController.attach(AbortSignal) // => boolean
 ```
 
-### `AggregatedAbortController.detach`
+### `AggregatedAbortController.detach()`
 Detach a signal from this controller.
 ```ts
 aggregatedController.detach(AbortSignal) // => boolean
 ```
 
-### `AggregatedAbortController.detachAll`
+### `AggregatedAbortController.detachAll()`
 Detach all signals from this controller.
 ```ts
 aggregatedController.detachAll() // => void
