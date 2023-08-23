@@ -1,6 +1,10 @@
+type RegisteredHandler<K extends keyof AbortSignalEventMap> = (this: AbortSignal, ev: AbortSignalEventMap[K]) => any;
+declare const AggregatedAbortControllerSymbol: unique symbol;
 export declare class AggregatedAbortController extends AbortController {
-    private signals;
-    private registers;
+    [AggregatedAbortControllerSymbol]: {
+        signals: Set<AbortSignal>;
+        registers: WeakMap<AbortSignal, RegisteredHandler<any>>;
+    };
     constructor(items: (AbortController | AbortSignal)[]);
     /**
      * Attach a signal to this controller.
@@ -15,3 +19,4 @@ export declare class AggregatedAbortController extends AbortController {
      */
     detachAll(): void;
 }
+export {};

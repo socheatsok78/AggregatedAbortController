@@ -1,11 +1,15 @@
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AggregatedAbortController = void 0;
+const AggregatedAbortControllerSymbol = Symbol('AggregatedAbortController');
 class AggregatedAbortController extends AbortController {
     constructor(items) {
         super();
-        this.signals = new Set();
-        this.registers = new WeakMap();
+        this[_a] = {
+            signals: new Set(),
+            registers: new WeakMap()
+        };
         for (const item of items) {
             const signal = item instanceof AbortController
                 ? item.signal
@@ -20,12 +24,13 @@ class AggregatedAbortController extends AbortController {
      * Attach a signal to this controller.
      */
     attach(signal) {
-        if (this.registers.has(signal)) {
+        const { signals, registers } = this[AggregatedAbortControllerSymbol];
+        if (registers.has(signal)) {
             return false;
         }
         const handler = () => this.abort();
-        this.signals.add(signal);
-        this.registers.set(signal, handler);
+        signals.add(signal);
+        registers.set(signal, handler);
         signal.addEventListener('abort', handler);
         return true;
     }
@@ -33,22 +38,25 @@ class AggregatedAbortController extends AbortController {
      * Detach a signal from this controller.
      */
     detach(signal) {
-        const handler = this.registers.get(signal);
+        const { signals, registers } = this[AggregatedAbortControllerSymbol];
+        const handler = registers.get(signal);
         if (handler === undefined) {
             return false;
         }
         signal.removeEventListener('abort', handler);
-        this.signals.delete(signal);
-        this.registers.delete(signal);
+        signals.delete(signal);
+        registers.delete(signal);
         return true;
     }
     /**
      * Detach all signals from this controller.
      */
     detachAll() {
-        for (const signal of this.signals) {
+        const { signals } = this[AggregatedAbortControllerSymbol];
+        for (const signal of signals) {
             this.detach(signal);
         }
     }
 }
 exports.AggregatedAbortController = AggregatedAbortController;
+_a = AggregatedAbortControllerSymbol;
